@@ -13,7 +13,8 @@ Specialties.init(
         },
         specialty: {
             type: DataTypes.STRING, // this will probably change from a string?
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
     },
     {

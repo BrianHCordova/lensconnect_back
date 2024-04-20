@@ -21,9 +21,9 @@ router.get("/:id", async (req, res) => {
             include: [
                 {
                     model: Specialties,
-                    where: {
-                        UserId: req.session.userId
-                    }
+                    // where: {
+                    //     UserId: req.session.userId
+                    // }
                 },
                 { model: ServeLocation }
             ]
@@ -42,18 +42,17 @@ router.post("/", async (req, res) => {
         const data = await User.create({
             username: req.body.username,
             password: req.body.password,
+            email: req.body.email,
             isPhotographer: req.body.isPhotographer,
             lastOnline: req.body.lastOnline,
-            // onlineStatus: req.body.onlineStatus,
-            // biography: req.body.biography,
+            biography: req.body.biography,
             // specialties: req.body.specialties,
             // areaOfService: req.body.areaOfService,
         });
-        req.session.save(() => {
+        await req.session.save(() => {
             req.session.userId = data.id;
             req.session.loggedIn = true;
             res.status(200).json(data);
-            res.json(data)
         });
     } catch (err) {
         console.log(err);
@@ -85,7 +84,7 @@ router.delete("/:id", async (req, res) => {
                 id: req.params.id,
             },
         });
-        res.json(data);
+        res.json({msg: "User has been deleted"});
     } catch (err) {
         console.log(err);
         res.status(500).json({ msg: "error occurred", err });

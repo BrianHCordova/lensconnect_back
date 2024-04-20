@@ -21,14 +21,8 @@ router.put("/editprofile/:id", async (req, res) => {
             UserId: req.session.userId
         });
 
-        const formatedSpecialties = specialties.toJSON()
-        const formatedserveLocation = serveLocation.toJSON()
-
-        console.log(formatedSpecialties)
-        console.log(formatedserveLocation)
-
-        await user.addServeLocation(serveLocation);
-        await user.addSpecialties(specialties);
+        await user.addUserservelocation(serveLocation);
+        await user.addUserspecialty(specialties);
 
         res.json(user);
     } catch (err) {

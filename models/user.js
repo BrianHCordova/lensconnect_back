@@ -46,11 +46,6 @@ User.init(
             allowNull: false,
             defaultValue: DataTypes.NOW
         },
-        onlineStatus: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false
-        },
         biography: {
             type: DataTypes.STRING,
             allowNull: true

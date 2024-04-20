@@ -12,7 +12,7 @@ Portfolio.belongsTo(User);
 
 User.hasMany(ServeLocation);
 
-ServeLocation.belongsTo(User);
+ServeLocation.hasMany(User);
 
 User.hasMany(Chat);
 
@@ -20,7 +20,7 @@ Chat.hasMany(User);
 
 User.hasMany(Specialties);
 
-Specialties.belongsTo(User);
+Specialties.hasMany(User);
 
 User.hasMany(Reviews);
 
@@ -50,20 +50,24 @@ User.belongsToMany(Chat, {
 
 // Specialties and User join statments
 Specialties.belongsToMany(User, {
-    through: 'UserSpecialties'
+    through: 'UserSpecialties',
+    as: 'userspecialties'
 })
 
 User.belongsToMany(Specialties, {
-    through: 'UserSpecialties'
+    through: 'UserSpecialties',
+    as: 'userspecialties'
 })
 
 // ServeLocation and User join statments
 ServeLocation.belongsToMany(User, {
-    through: 'UserServeLocation'
+    through: 'UserServeLocation',
+    as: 'userservelocations'
 })
 
 User.belongsToMany(ServeLocation, {
-    through: 'UserServeLocation'
+    through: 'UserServeLocation',
+    as: 'userservelocations'
 })
 
 
