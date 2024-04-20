@@ -7,9 +7,7 @@ const userData = [
         "isPhotographer": false,
         "lastOnline": "2021-08-01",//these dates are just placeholders
         "onlineStatus": false,
-        "biography": "I am a photographer",
-        "specialties": "landscape",
-        "areaOfService": "Orange County"
+        "biography": "I am a photographer"
     },
 
     {
@@ -18,9 +16,7 @@ const userData = [
         "isPhotographer": true,
         "lastOnline": "2021-08-01",//these dates are just placeholders
         "onlineStatus": false,
-        "biography": "I am a better photographer than Andrew",
-        "specialties": "portrait",
-        "areaOfService": "Los Angeles"
+        "biography": "I am a better photographer than Andrew"
     }
 ];
 

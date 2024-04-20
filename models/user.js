@@ -42,15 +42,6 @@ User.init(
             type: DataTypes.STRING,
             allowNull: true
         },
-        //this is a string for now, but could change to a nested table
-        specialties: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-        areaOfService: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
     },
     {
         sequelize

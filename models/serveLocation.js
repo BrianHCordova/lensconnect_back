@@ -1,11 +1,11 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Images extends Model {}
+class ServeLocation extends Model {}
 
-Images.init(
+ServeLocation.init(
     {
-        Id: {
+        id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
@@ -19,15 +19,14 @@ Images.init(
                 key: 'id'
             }
         },
-        image: {
-            type: DataTypes.STRING, //this will be a URL
+        location: {
+            type: DataTypes.STRING, // this will probably change from a string?
             allowNull: false
         },
     },
     {
         sequelize,
-        modelName: 'images'
     }
 );
 
-module.exports = Images;
+module.exports = ServeLocation;
