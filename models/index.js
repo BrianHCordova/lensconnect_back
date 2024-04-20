@@ -28,11 +28,43 @@ Reviews.belongsTo(User);
 
 Portfolio.hasMany(Tags);
 
-Tags.belongsTo(Portfolio);
+Tags.hasMany(Portfolio);
 
-Portfolio.belongsToMany(Tags)
+// Portfolio and Tag join statements
+Portfolio.belongsToMany(Tags, {
+    through: 'PortfolioTags'
+}) 
 
-Tags.belongsToMany(Portfolio)
+Tags.belongsToMany(Portfolio, {
+    through: 'PortfolioTags'
+})
+
+// Chat and User join statments
+Chat.belongsToMany(User, {
+    through: 'UserChat'
+})
+
+User.belongsToMany(Chat, {
+    through: 'UserChat'
+})
+
+// Specialties and User join statments
+Specialties.belongsToMany(User, {
+    through: 'UserSpecialties'
+})
+
+User.belongsToMany(Specialties, {
+    through: 'UserSpecialties'
+})
+
+// ServeLocation and User join statments
+ServeLocation.belongsToMany(User, {
+    through: 'UserServeLocation'
+})
+
+User.belongsToMany(ServeLocation, {
+    through: 'UserServeLocation'
+})
 
 
-module.exports = { User, Portfolio };
+module.exports = { User, Portfolio, Specialties, Tags, Reviews, Chat, ServeLocation };
