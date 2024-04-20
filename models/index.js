@@ -1,58 +1,38 @@
-const User = require('./user');
-const Portfolio = require('./portfolio');
-const ServeLocation = require('./serveLocation');
-const Chat = require('./chat');
-const Specialties = require('./specialties');
-const Reviews = require('./reviews');
-const Tags = require('./tags');
+const User = require('./User');
+const Portfolio = require('./Portfolio');
+const ServeLocation = require('./ServeLocation');
+const Chat = require('./Chat');
+const Specialties = require('./Specialties');
+const Reviews = require('./Reviews');
+const Tags = require('./Tags');
 
-User.hasMany(Portfolio, {
-    foreignKey: 'user_id'
-});
+User.hasMany(Portfolio);
 
-Portfolio.belongsTo(User, {
-    foreignKey: 'user_id'
-});
+Portfolio.belongsTo(User);
 
-User.hasMany(ServeLocation, {
-    foreignKey: 'user_id'
-});
+User.hasMany(ServeLocation);
 
-ServeLocation.belongsTo(User, {
-    foreignKey: 'user_id'
-});
+ServeLocation.belongsTo(User);
 
-User.hasMany(Chat, {
-    foreignKey: 'user_id'
-});
+User.hasMany(Chat);
 
-Chat.hasMany(User, {
-    foreignKey: 'user_id'
-});
+Chat.hasMany(User);
 
-User.hasMany(Specialties, {
-    foreignKey: 'user_id'
-});
+User.hasMany(Specialties);
 
-Specialties.belongsTo(User, {
-    foreignKey: 'user_id'
-});
+Specialties.belongsTo(User);
 
-User.hasMany(Reviews, {
-    foreignKey: 'user_id'
-});
+User.hasMany(Reviews);
 
-Reviews.belongsTo(User, {
-    foreignKey: 'user_id'
-});
+Reviews.belongsTo(User);
 
-Portfolio.hasMany(Tags, {
-    foreignKey: 'portfolio_id'
-});
+Portfolio.hasMany(Tags);
 
-Tags.belongsTo(Portfolio, {
-    foreignKey: 'portfolio_id'
-});
+Tags.belongsTo(Portfolio);
+
+Portfolio.belongsToMany(Tags)
+
+Tags.belongsToMany(Portfolio)
 
 
 module.exports = { User, Portfolio };
