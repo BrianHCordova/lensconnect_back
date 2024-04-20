@@ -4,6 +4,7 @@ const userData = [
     {
         "username": "andrew",
         "password": "password",
+        "email": "andrew@joe.joe",
         "isPhotographer": false,
         "lastOnline": "2021-08-01",//these dates are just placeholders
         "onlineStatus": false,
@@ -13,6 +14,7 @@ const userData = [
     {
         "username": "joe",
         "password": "password",
+        "email": "joe@joe.joe",
         "isPhotographer": true,
         "lastOnline": "2021-08-01",//these dates are just placeholders
         "onlineStatus": false,
@@ -20,6 +22,6 @@ const userData = [
     }
 ];
 
-const seedUsers = () => User.bulkCreate(userData);
+const seedUsers = () => User.bulkCreate(userData, { individualHooks: true, });
 
 module.exports = seedUsers;
