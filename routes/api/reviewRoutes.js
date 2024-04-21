@@ -56,9 +56,9 @@ router.post("/", async (req, res) => {
         // Finds the reviwer. who is the current session (logged-in) user
         const reviewer = await User.findByPk(req.session.userId)
         // Sets each user to their respective role in the review model
-        reviewData.setReviewee(reviewee)
-        reviewData.setReviewer(reviewer)
-        reviewer.addReview(reviewData)
+        await reviewData.setReviewee(reviewee)
+        await reviewData.setReviewer(reviewer)
+        await reviewer.addReview(reviewData)
         // Returns the data
         res.json(reviewData);
         // Cathes for errors
