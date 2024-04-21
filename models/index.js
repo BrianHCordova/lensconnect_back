@@ -22,10 +22,6 @@ User.hasMany(Specialties);
 
 Specialties.hasMany(User);
 
-User.hasMany(Reviews);
-
-Reviews.belongsTo(User);
-
 Portfolio.hasMany(Tags);
 
 Tags.hasMany(Portfolio);
@@ -69,6 +65,18 @@ User.belongsToMany(ServeLocation, {
     through: 'UserServeLocation',
     as: 'userservelocations'
 })
+
+// Reviews and User join statments
+User.hasMany(Reviews) 
+
+Reviews.belongsTo(User, {
+    as: 'reviewer'
+});
+
+Reviews.belongsTo(User, {
+    as: 'reviewee'
+})
+
 
 
 module.exports = { User, Portfolio, Specialties, Tags, Reviews, Chat, ServeLocation };
