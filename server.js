@@ -4,6 +4,8 @@ const routes = require('./routes');
 const sequelize = require('./config/connection')
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const multer = require('multer')
+
 // import sequelize connection
 
 const app = express();
@@ -19,6 +21,9 @@ const sess = {
 	}),
 };
 app.use(session(sess));
+
+const storage = multer.memoryStorage()
+const upload = multer({storage: storage})
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
