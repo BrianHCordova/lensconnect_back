@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { Reviews, User } = require("../../models");
+const { Review, User } = require("../../models");
 
-// GET route for all reviews
+// GET route for all Review
 router.get("/", async (req, res) => {
     try {
-        // Finds all reviews
-        const reviewData = await Reviews.findAll();
+        // Finds all Review
+        const reviewData = await Review.findAll();
         // Returns the data
         res.json(reviewData);
         // Catches for errors
@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
 // GET route for one review by id
 router.get("/:id", async (req, res) => {
     try {
-        const reviewData = await Reviews.findByPk(req.params.id, {
+        const reviewData = await Review.findByPk(req.params.id, {
             // Includes the username of the two independent users (reviewer, and reviewee)
             include: [
                 {
@@ -47,7 +47,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
     try {
         // Posts the review content and rating
-        const reviewData = await Reviews.create({
+        const reviewData = await Review.create({
             review: req.body.review,
             rating: req.body.rating,
         });
@@ -72,7 +72,7 @@ router.post("/", async (req, res) => {
 // PUT route to update a review
 router.put("/:id", async (req, res) => {
     try {
-        const reviewData = await Reviews.update(
+        const reviewData = await Review.update(
             // Can only update rating and review, the review and reviewee cannot be updated.
             {
                 review: req.body.review,
@@ -95,7 +95,7 @@ router.put("/:id", async (req, res) => {
 // DELETE route to delete a review
 router.delete("/:id", async (req, res) => {
     try {
-        const reviewData = await Reviews.destroy({
+        const reviewData = await Review.destroy({
             // Finds the id of the user being deleted
             where: {
                 id: req.params.id,

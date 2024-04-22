@@ -7,12 +7,6 @@ class Chat extends Model {}
 
 Chat.init(
     {
-        id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true
-        },
         message: {
             type: DataTypes.STRING,
             allowNull: false

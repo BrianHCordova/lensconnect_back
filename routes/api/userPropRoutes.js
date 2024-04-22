@@ -1,18 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const { User, Specialties, ServeLocation } = require("../../models");
+const { User, Specialty, ServeLocation } = require("../../models");
 
 // PUT request to edit users properties
 router.put("/editprofile/:id", async (req, res) => {
     try {
         const user = await User.findByPk(req.params.id, {
-            include: [Specialties, ServeLocation]
+            include: [Specialty, ServeLocation]
         });
         user.update({
             biography: req.body.biography,
             isPhotographer: req.body.isPhotographer
         });
-        const specialties = await  Specialties.create({
+        const specialties = await  Specialty.create({
             specialty: req.body.specialty,
             UserId: req.session.userId
         });
@@ -21,8 +21,8 @@ router.put("/editprofile/:id", async (req, res) => {
             UserId: req.session.userId
         });
 
-        await user.addUserservelocation(serveLocation);
-        await user.addUserspecialty(specialties);
+        await user.addServeLocation(serveLocation);
+        await user.addSpecialty(specialties);
 
         res.json(user);
     } catch (err) {

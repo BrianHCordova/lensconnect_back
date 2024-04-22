@@ -1,16 +1,10 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Specialties extends Model {}
+class Specialty extends Model {}
 
-Specialties.init(
+Specialty.init(
     {
-        id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true
-        },
         specialty: {
             type: DataTypes.STRING, // this will probably change from a string?
             allowNull: false,
@@ -22,4 +16,4 @@ Specialties.init(
     }
 );
 
-module.exports = Specialties;
+module.exports = Specialty;
