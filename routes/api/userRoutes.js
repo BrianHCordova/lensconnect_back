@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { User, Specialties, ServeLocation, Reviews } = require("../../models/index.js");
+const { User, Specialty, ServeLocation, Review } = require("../../models/index.js");
 const bcrypt = require('bcrypt')
 
 // GET ALL
@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
     try {
         const data = await User.findByPk(req.params.id, {
-            include: [Specialties, ServeLocation, Reviews]
+            include: [Specialty, ServeLocation, Review]
         });
         console.log(data) 
         res.json(data);
