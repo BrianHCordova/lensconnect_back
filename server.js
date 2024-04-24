@@ -5,6 +5,7 @@ const sequelize = require('./config/connection')
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const multer = require('multer')
+const cors = require('cors')
 
 // import sequelize connection
 
@@ -29,6 +30,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(routes);
+app.use(cors());
 
 // sync sequelize models to the database, then turn on the server
 
