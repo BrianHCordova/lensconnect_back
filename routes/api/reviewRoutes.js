@@ -5,8 +5,22 @@ const { Review, User } = require("../../models");
 // GET route for all Review
 router.get("/", async (req, res) => {
     try {
+        
         // Finds all Review
-        const reviewData = await Review.findAll();
+        const reviewData = await Review.findAll({
+            include: [
+                {
+                    model: User,
+                    as: 'reviewer',
+                    attributes: ['username']
+                },
+                {
+                    model: User,
+                    as: 'reviewee',
+                    attributes: ['username']
+                }
+            ]
+        });
         // Returns the data
         res.json(reviewData);
         // Catches for errors
