@@ -115,10 +115,17 @@ router.get("/reviewee/:id", async (req, res) => {
     try {
         // Finds all Review
         const reviewData = await Review.findAll({
-
+            include: [
+                {
+                    model: User,
+                    as: 'reviewer',
+                    attributes: ['username']
+                }
+            ],
             where: {
                 revieweeId: req.params.id
             }
+            
         });
         // Returns the data
         res.json(reviewData);
