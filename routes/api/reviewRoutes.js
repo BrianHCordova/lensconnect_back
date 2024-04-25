@@ -110,4 +110,23 @@ router.delete("/:id", async (req, res) => {
     }
 });
 
+// GET route to et reviews by the reviewee id
+router.get("/reviewee/:id", async (req, res) => {
+    try {
+        // Finds all Review
+        const reviewData = await Review.findAll({
+
+            where: {
+                revieweeId: req.params.id
+            }
+        });
+        // Returns the data
+        res.json(reviewData);
+        // Catches for errors
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ msg: "error occurred", err });
+    }
+});
+
 module.exports = router;
