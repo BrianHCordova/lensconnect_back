@@ -5,8 +5,22 @@ const { Review, User } = require("../../models");
 // GET route for all Review
 router.get("/", async (req, res) => {
     try {
+        
         // Finds all Review
-        const reviewData = await Review.findAll();
+        const reviewData = await Review.findAll({
+            include: [
+                {
+                    model: User,
+                    as: 'reviewer',
+                    attributes: ['username']
+                },
+                {
+                    model: User,
+                    as: 'reviewee',
+                    attributes: ['username']
+                }
+            ]
+        });
         // Returns the data
         res.json(reviewData);
         // Catches for errors
@@ -53,8 +67,8 @@ router.post("/", async (req, res) => {
         });
         // Finds the reviewee, who the review is being write about, and is sent in the post request as 'revieeeId'
         const reviewee = await User.findByPk(req.body.revieweeId)
-        // Finds the reviwer. who is the current session (logged-in) user
-        const reviewer = await User.findByPk(req.session.userId)
+        // Finds the reviwer. who is the current (logged-in) user
+        const reviewer = await User.findByPk(req.body.userId)
         // Sets each user to their respective role in the review model
         await reviewData.setReviewee(reviewee)
         await reviewData.setReviewer(reviewer)
@@ -115,10 +129,17 @@ router.get("/reviewee/:id", async (req, res) => {
     try {
         // Finds all Review
         const reviewData = await Review.findAll({
-
+            include: [
+                {
+                    model: User,
+                    as: 'reviewer',
+                    attributes: ['username']
+                }
+            ],
             where: {
                 revieweeId: req.params.id
             }
+            
         });
         // Returns the data
         res.json(reviewData);

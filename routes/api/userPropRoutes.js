@@ -14,11 +14,11 @@ router.put("/editprofile/:id", async (req, res) => {
         });
         const specialties = await  Specialty.create({
             specialty: req.body.specialty,
-            UserId: req.session.userId
+            UserId: req.body.userId
         });
         const serveLocation = await ServeLocation.create({
             location: req.body.location,
-            UserId: req.session.userId
+            UserId: req.body.userId
         });
 
         await user.addServeLocation(serveLocation);
