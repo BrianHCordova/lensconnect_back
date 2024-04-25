@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { User, Specialties, ServeLocation } = require("../../models");
+const { User, Specialties, ServeLocation, Portfolio } = require("../../models");
 const multer = require('multer')
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3')
 require('dotenv').config();
@@ -35,6 +35,8 @@ router.post('/', upload.single('image'), async (req, res) => {
 
     const command = new PutObjectCommand(params)
     await s3.send(command)
+
+    const post = await Portfolio.
 
     res.json({msg: "uploaded"})
 })
