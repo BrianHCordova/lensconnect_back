@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { User, Specialty, ServeLocation, Review } = require("../../models/index.js");
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+
 
 // GET ALL
 router.get("/", async (req, res) => {
@@ -41,11 +43,21 @@ router.post("/", async (req, res) => {
             // specialties: req.body.specialties,
             // areaOfService: req.body.areaOfService,
         });
-        await req.session.save(() => {
-            req.session.userId = data.id;
-            req.session.loggedIn = true;
-            res.status(200).json(data);
-        });
+
+        const token = await jwt.sign(
+            {
+                id: data.id,
+                email: data.email,
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "24h"
+            }
+        )
+        res.json({
+            token,
+            user: data
+        })
     } catch (err) {
         console.log(err);
         res.status(500).json({ msg: "error occurred", err });
@@ -86,18 +98,20 @@ router.delete("/:id", async (req, res) => {
 // POST request for login
 router.post('/login', async (req, res) => {
     try {
+        console.log(req.body)
         // Finds the user where the email matches the email they used to login since emails are unique
         const userData = await User.findOne(
             {
                 where:
                 {
-                    username: req.body.username
+                    // username: req.body.username,
+                    email: req.body.email
                 }
             });
         // If no user was found it sends a 400 status
         if (!userData) {
             res
-                .status(400)
+                .status(401)
                 .json({ message: 'Incorrect email or password' });
             return;
         }
@@ -105,17 +119,26 @@ router.post('/login', async (req, res) => {
         const validPassword = await userData.checkPassword(req.body.password);
 
         if (!validPassword) {
-            res.status(400).json({
+            res.status(401).json({
                 message: 'Incorrect email or password. Please try again!',
             });
             return;
         }
         // Saves the session data
-        req.session.save(() => {
-            req.session.userId = userData.id;
-            req.session.loggedIn = true;
-            res.json({ user: userData, message: 'You are now logged in!' });
-        });
+        const token = jwt.sign(
+            {
+                id: userData.id,
+                email: userData.email,
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "24h"
+            }
+        )
+        res.json({
+           token,
+            user: userData
+        })
         // Catch for errors
     } catch (err) {
         res.status(400).json(err);
