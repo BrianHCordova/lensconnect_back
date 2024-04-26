@@ -20,7 +20,22 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
     try {
         const data = await User.findByPk(req.params.id, {
-            include: [Specialty, ServeLocation, Review]
+            include: [Specialty, ServeLocation, 
+                // Adds the reviewee and reviewer usernames for the reviews
+                {model: Review,  include: [
+                    {
+                        model: User,
+                        as: 'reviewer',
+                        attributes: ['username']
+                    },
+                    {
+                        model: User,
+                        as: 'reviewee',
+                        attributes: ['username']
+                    }
+                ]}
+            ]
+            
         });
         console.log(data) 
         res.json(data);

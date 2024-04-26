@@ -5,6 +5,8 @@ const userData = [
         "username": "andrew",
         "password": "password",
         "email": "andrew@joe.joe",
+        "website": "ReelRadar.com",
+        "videography": false,
         "isPhotographer": false,
         "lastOnline": "2021-08-01",//these dates are just placeholders
         "onlineStatus": false,
@@ -15,6 +17,8 @@ const userData = [
         "username": "joe",
         "password": "password",
         "email": "joe@joe.joe",
+        "website": "ReelRadar.com",
+        "videography": false,
         "isPhotographer": true,
         "lastOnline": "2021-08-01",//these dates are just placeholders
         "onlineStatus": false,
