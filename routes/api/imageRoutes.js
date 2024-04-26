@@ -28,7 +28,11 @@ const upload = multer({storage: storage})
 router.get('/', async (req, res) => {
     const images = await Portfolio.findAll()
 
+    // const imageUrlList = []
+
     for (const image of images) {
+        console.log(image.dataValues)
+        console.log('==================================')
 
         const getObjectParams = {
             Bucket: bucketName,
@@ -36,9 +40,16 @@ router.get('/', async (req, res) => {
         }
         const command = new GetObjectCommand(getObjectParams);
         const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-        image.imageUrl = url
+        image.dataValues.imageUrl = url
+        // const newList = {
+        //     ...image,
+        //     imageUrl: url
+        // }
+        // imageUrlList.push(newList)
+        // console.log(image)
     }
-    res.json(images)
+    // console.log(imageUrlList)
+    res.send(images)
 })
 
 
