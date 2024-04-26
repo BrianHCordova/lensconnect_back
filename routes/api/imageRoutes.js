@@ -38,6 +38,7 @@ router.get('/', async (req, res) => {
         const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
         image.imageUrl = url
     }
+    res.json(images)
 })
 
 
