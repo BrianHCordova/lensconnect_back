@@ -45,7 +45,8 @@ socketIO.on('connection', (socket) => {
     console.log(`⚡: ${socket.id} user just connected!`);
     
     socket.on('message', (data) => {
-        console.log(`📩: ${JSON.stringify(data)}`);
+        console.log(`📩: ${socket.id} says ${JSON.stringify(data)}`);
+		
         socketIO.emit('messageResponse', data);
     });
     
