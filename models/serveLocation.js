@@ -8,7 +8,7 @@ ServeLocation.init(
         location: {
             type: DataTypes.STRING, // this will probably change from a string?
             allowNull: false,
-            unique: true
+            // unique: true
         },
     },
     {

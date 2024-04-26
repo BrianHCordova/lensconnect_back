@@ -30,6 +30,15 @@ User.init(
               isEmail: true,
             },
         },
+        website: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        videography: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
         isPhotographer: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
