@@ -30,25 +30,19 @@ router.get('/', async (req, res) => {
 
     // const imageUrlList = []
 
-    for (const image of images) {
-        console.log(image.dataValues)
-        console.log('==================================')
+    for (let i=0; i<images.length; i++) {
 
         const getObjectParams = {
             Bucket: bucketName,
-            Key: image.image
+            Key: images[i].image
         }
         const command = new GetObjectCommand(getObjectParams);
         const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-        image.dataValues.imageUrl = url
-        // const newList = {
-        //     ...image,
-        //     imageUrl: url
-        // }
-        // imageUrlList.push(newList)
-        // console.log(image)
+        images[i].dataValues.imageUrl = url
+        images[i].dataValues.column= i % 4 + 1
+        
+       
     }
-    // console.log(imageUrlList)
     res.send(images)
 })
 
