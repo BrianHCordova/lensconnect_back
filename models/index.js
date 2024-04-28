@@ -19,16 +19,14 @@ Tag.belongsToMany(Portfolio, {
     through: 'PortfolioTag'
 })
 
-User.hasMany(Chat)
-Chat.belongsTo(User)
+User.hasMany(Chat) 
 
-// Chat and User join statments
-Chat.belongsToMany(User, {
-    through: 'UserChat'
-})
+Chat.belongsTo(User, {
+    as: 'sender'
+});
 
-User.belongsToMany(Chat, {
-    through: 'UserChat'
+Review.belongsTo(User, {
+    as: 'receiver'
 })
 
 // Specialties and User join statments
