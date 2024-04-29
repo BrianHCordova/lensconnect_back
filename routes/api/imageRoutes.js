@@ -28,20 +28,26 @@ const upload = multer({storage: storage})
 router.get('/', async (req, res) => {
     const images = await Portfolio.findAll()
 
-    for (const image of images) {
+    // const imageUrlList = []
+
+    for (let i=0; i<images.length; i++) {
 
         const getObjectParams = {
             Bucket: bucketName,
-            Key: image.image
+            Key: images[i].image
         }
         const command = new GetObjectCommand(getObjectParams);
         const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-        image.imageUrl = url
+        images[i].dataValues.imageUrl = url
+        images[i].dataValues.column= i % 4 + 1
+        
+       
     }
+    res.send(images)
 })
 
 
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/singlefile/:id', upload.single('image'), async (req, res) => {
     console.log("req.body", req.body)
     console.log("req.file", req.file)
 
@@ -57,11 +63,47 @@ router.post('/', upload.single('image'), async (req, res) => {
     await s3.send(command)
 
     const post = await Portfolio.create({
-        image: req.file.originalname
+        image: req.file.originalname,
+        UserId: req.params.id
 
     })
 
     res.json(post)
+})
+
+router.post('/multipleFiles/:id', upload.array('multipleFiles'), async (req, res) => {
+    console.log("req.body", req.body)
+    console.log("req.file", req.files)
+
+    // req.file.buffer
+    const itemsToUpload = req.files
+
+    // if (Array.isArray(itemsToUpload) && itemsToUpload.length > 0) {
+    //     res.json(itemsToUpload)
+    // }
+
+    for (const items of itemsToUpload) {
+        const params = {
+            Bucket: bucketName,
+            Key: items.originalname,
+            Body: items.buffer,
+            ContentType: items.mimetype,
+        }
+    
+        const command = new PutObjectCommand(params)
+        await s3.send(command)
+    
+        const post = await Portfolio.create({
+            image: items.originalname,
+            UserId: req.params.id
+    
+        })
+    }
+    
+
+    
+
+    res.json({msg: 'images uploaded'})
 })
 
 router.delete('/:id', async (req, res) => {
