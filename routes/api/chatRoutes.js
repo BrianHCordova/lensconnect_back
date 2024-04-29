@@ -7,20 +7,7 @@ router.get("/", async (req, res) => {
     try {
         
         // Finds all Chat
-        const chatData = await Chat.findAll({
-            include: [
-                {
-                    model: User,
-                    as: 'sender',
-                    attributes: ['username']
-                },
-                {
-                    model: User,
-                    as: 'receiver',
-                    attributes: ['username']
-                }
-            ]
-        });
+        const chatData = await Chat.findAll();
         // Returns the data
         res.json(chatData);
         // Catches for errors
@@ -33,21 +20,7 @@ router.get("/", async (req, res) => {
 // GET route for one chat by id
 router.get("/:id", async (req, res) => {
     try {
-        const chatData = await Chat.findByPk(req.params.id, {
-            // Includes the username of the two independent users (sender, and receiver)
-            include: [
-                {
-                    model: User,
-                    as: 'sender',
-                    attributes: ['username']
-                },
-                {
-                    model: User,
-                    as: 'receiver',
-                    attributes: ['username']
-                }
-            ]
-        });
+        const chatData = await Chat.findByPk(req.params.id);
         // Returns the data
         res.json(chatData);
         // Catches for errors
@@ -57,10 +30,29 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+//GET route for all chat by user id
+router.get("/user/:id", async (req, res) => {
+    try {
+        const chatData = await Chat.findAll({
+            where: {
+                user_id: req.params.id,
+            },
+        });
+        res.json(chatData);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ msg: "error occurred", err });
+    }
+});
+
 // POST route to create a chat
 router.post("/", async (req, res) => {
     try {
-        const chatData = await Chat.create(req.body);
+        const chatData = await Chat.create({
+            user_id: req.body.user_id,
+            username: req.body.username,
+            message: req.body.message,
+        });
         res.status(200).json(chatData);
     } catch (err) {
         console.log(err);
