@@ -45,6 +45,20 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+router.get("/byusername/:username", async (req, res) => {
+    try {
+        const data = await User.findOne({
+            where: {
+                username: req.params.username
+            }
+        });
+        res.json(data);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ msg: "error occurred", err });
+    }
+});
+
 // CREATE
 router.post("/", async (req, res) => {
     try {
