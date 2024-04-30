@@ -74,9 +74,5 @@ TransactionReport.belongsTo(User, {
 })
 
 
-<<<<<<< HEAD
 
 module.exports = { User, Portfolio, Specialty, Tag, Review, Chat, ServeLocation, TransactionReport };
-=======
-module.exports = { User, Portfolio, Specialty, Tag, Review, Chat, ChatRoom, ServeLocation };
->>>>>>> 2951657 (updates)
