@@ -23,24 +23,10 @@ Chat.init(
                 key: 'username'
             }
         },
-        // sender_username: {
-        //     type: DataTypes.STRING,
-        //     allowNull: false,
-        //     references: {
-        //         model: 'Users',
-        //         key: 'username'
-        //     }
-        // },
         message: {
             type: DataTypes.STRING,
             allowNull: false
-        }
-        // we can use "createdAt" and "updatedAt" to track when a chat was created and last updated
-        // date: {
-        //     type: DataTypes.DATE,
-        //     allowNull: false,
-        //     defaultValue: DataTypes.NOW
-        // }
+        },
     },
     {
         sequelize,

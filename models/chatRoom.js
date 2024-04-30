@@ -9,22 +9,22 @@ ChatRoom.init(
             type: DataTypes.STRING,
             allowNull: false
         },
-        // user_id: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false,
-        //     references: {
-        //         model: 'Users',
-        //         key: 'id'
-        //     }
-        // },
-        // username: {
-        //     type: DataTypes.STRING,
-        //     allowNull: false,
-        //     references: {
-        //         model: 'Users',
-        //         key: 'username'
-        //     }
-        // }
+        user_sender: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'Users',
+                key: 'id'
+            }
+        },
+        user_receiver: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'Users',
+                key: 'id'
+            }
+        }
     },
     {
         sequelize,

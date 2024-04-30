@@ -52,6 +52,7 @@ router.post("/", async (req, res) => {
             user_id: req.body.user_id,
             username: req.body.username,
             message: req.body.message,
+            ChatRoomId: req.body.ChatRoomId
         });
         res.status(200).json(chatData);
     } catch (err) {
