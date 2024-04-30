@@ -5,6 +5,7 @@ const Chat = require('./Chat');
 const Specialty = require('./Specialty');
 const Review = require('./Review');
 const Tag = require('./Tag');
+const TransactionReport = require('./TransactionReport')
 
 User.hasMany(Portfolio);
 
@@ -58,6 +59,17 @@ Review.belongsTo(User, {
     as: 'reviewee'
 })
 
+// TransactionReport and User join statments
+User.hasMany(TransactionReport) 
+
+TransactionReport.belongsTo(User, {
+    as: 'hirer'
+});
+
+TransactionReport.belongsTo(User, {
+    as: 'hiree'
+})
 
 
-module.exports = { User, Portfolio, Specialty, Tag, Review, Chat, ServeLocation };
+
+module.exports = { User, Portfolio, Specialty, Tag, Review, Chat, ServeLocation, TransactionReport };

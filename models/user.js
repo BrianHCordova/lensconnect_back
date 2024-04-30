@@ -53,6 +53,14 @@ User.init(
             type: DataTypes.STRING,
             allowNull: true
         },
+        averageRating:{
+            type: DataTypes.FLOAT,
+            allowNull: true,
+            validate: {
+                min: 1,
+                max: 5
+            }
+        }
     },
     {
         hooks: {
