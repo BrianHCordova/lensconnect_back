@@ -8,7 +8,9 @@ const jwt = require('jsonwebtoken')
 // GET ALL
 router.get("/", async (req, res) => {
     try {
-        const data = await User.findAll();
+        const data = await User.findAll({
+            include: [Specialty, ServeLocation]
+        });
         res.json(data);
     } catch (err) {
         console.log(err);
