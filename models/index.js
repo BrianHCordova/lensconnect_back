@@ -2,6 +2,7 @@ const User = require('./User');
 const Portfolio = require('./Portfolio');
 const ServeLocation = require('./ServeLocation');
 const Chat = require('./Chat');
+const ChatRoom = require('./chatRoom');
 const Specialty = require('./Specialty');
 const Review = require('./Review');
 const Tag = require('./Tag');
@@ -20,15 +21,17 @@ Tag.belongsToMany(Portfolio, {
     through: 'PortfolioTag'
 })
 
-// User.hasMany(Chat) 
-
-// Chat.belongsTo(User, {
-//     as: 'sender'
+// 'ChatRoom.hasMany(Chat, {
+//     foreignKey: 'chatRoomId'
 // });
 
-// Chat.belongsTo(User, {
-//     as: 'receiver'
-// })
+// Chat.belongsTo(ChatRoom, {
+//     foreignKey: 'chatRoomId'
+// });
+
+// User.hasMany(Chat);
+
+// Chat.belongsTo(User);
 
 // Specialties and User join statments
 Specialty.belongsToMany(User, {
@@ -71,5 +74,9 @@ TransactionReport.belongsTo(User, {
 })
 
 
+<<<<<<< HEAD
 
 module.exports = { User, Portfolio, Specialty, Tag, Review, Chat, ServeLocation, TransactionReport };
+=======
+module.exports = { User, Portfolio, Specialty, Tag, Review, Chat, ChatRoom, ServeLocation };
+>>>>>>> 2951657 (updates)
