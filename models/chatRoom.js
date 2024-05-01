@@ -6,7 +6,7 @@ class ChatRoom extends Model {}
 ChatRoom.init(
     {
         room_name: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         user_sender: {

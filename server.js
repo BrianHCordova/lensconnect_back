@@ -7,6 +7,7 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const multer = require('multer')
 const http = require('http');
 const cors = require('cors');
+const { log } = require("console");
 
 // import sequelize connection
 
@@ -40,24 +41,46 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(routes);
 
-const users = {};
-//we can move these to a separate file later
 socketIO.on('connection', (socket) => {
-  socket.on('join', (name) => {
-    // console.log(name);
-    users[socket.id] = name;
-    // console.log(users);
-    console.log(`👥: ${name} just joined!`)
-    socket.emit('user-connected', name)
-    });
-  // console.log(`⚡: ${socket.id} user just connected!`)
 
-  socket.on('message', (data, roomValue) => {
-    console.log(roomValue.room)
-    if (roomValue.room === ''){
-      console.log(`📩: ${JSON.stringify(data.user)} says ${JSON.stringify(data.message)} at ${JSON.stringify(data.date)}`);
+  socket.on('joinRoom', (room, userId, id) => {
+
+    console.log(`🚪: ${userId} joined room ${room} with ${id}`);
+    //TODO: create logic to check if user and receiver exist
+    //check to see if room exists
+    fetch(`http://localhost:3000/api/chatroom/room/${room}`)
+      .then(response => response.json())
+      .then(data => {
+        //if exists, join room
+        if (data) {
+          socket.join(room);
+          //else, create room and join
+        } else {
+          fetch('http://localhost:3000/api/chatroom', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              room_name: room,
+              user_sender: userId,
+              user_receiver: id
+            }),
+          })
+          .then(response => response.json())
+          .then(data => {
+            socket.join(data.room);
+          });
+        }
+      });
+    socket.join(room);
+  });
+
+  socket.on('message', (data) => {
+    {
       
-      // make a post request here to save the message to the database
+      console.log(`📩: ${JSON.stringify(data.user)} says ${JSON.stringify(data.message)}`);
+          //   // make a post request here to save the message to the database
       fetch('http://localhost:3000/api/chat', {
       method: 'POST',
       headers: {
@@ -67,20 +90,14 @@ socketIO.on('connection', (socket) => {
         user_id: data.ID,
         username: data.user,
         message: data.message,
+        ChatRoomId: data.ChatRoomId
       }),
       });
-
-      socketIO.emit('messageResponse', data);
-    } else {
-      console.log(`📩: ${JSON.stringify(data.user)} says ${JSON.stringify(data.message)} at ${JSON.stringify(data.date)} in room ${roomValue.room}`);
-      socket.to(roomValue.room).emit('messageResponse', data);
+      socket.emit('messageResponse', data);
+      // socket.to(roomValue.room).emit('messageResponse', data);
     }
   });
 
-    socket.on('joinRoom', (room) => {
-      console.log(`🚪: ${socket.id} joined room ${room.room}`);
-      socket.join(room.room);
-    });
 
     socket.on('disconnect', () => {
       console.log(`👋: ${socket.id} user just disconnected!`);

@@ -31,10 +31,6 @@ Chat.belongsTo(ChatRoom, {
 
 // ChatRoom.hasMany(User);
 
-// User.hasMany(Chat);
-
-// Chat.belongsTo(User);
-
 // Specialties and User join statments
 Specialty.belongsToMany(User, {
     through: 'UserSpecialties',
