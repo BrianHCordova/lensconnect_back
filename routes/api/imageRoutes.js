@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { User, Specialties, ServeLocation, Portfolio } = require("../../models");
+const { User, Specialty, ServeLocation, Portfolio } = require("../../models");
 const multer = require('multer')
 const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3')
 require('dotenv').config();
@@ -26,7 +26,9 @@ const storage = multer.memoryStorage()
 const upload = multer({storage: storage})
 
 router.get('/', async (req, res) => {
-    const images = await Portfolio.findAll()
+    const images = await Portfolio.findAll({
+        include: [User]
+    })
 
     // const imageUrlList = []
 
@@ -107,12 +109,12 @@ router.post('/multipleFiles/:id', upload.array('multipleFiles'), async (req, res
 })
 
 router.delete('/:id', async (req, res) => {
-    const image = await Portfolio.findByPk({where: { id: req.params.id}})
+    const image = await Portfolio.findByPk(req.params.id)
     if (!image) {
         res.status(404).send("Post not found")
         return
     }
-
+    console.log(image)
     const params = {
         Bucket: bucketName,
         Key: image.image
@@ -121,8 +123,8 @@ router.delete('/:id', async (req, res) => {
     const command = new DeleteObjectCommand(params)
     await s3.send(command)
 
-    await Portfolio.delete({where: {id: req.params.id}})
-
+    await Portfolio.destroy({where: {id: req.params.id}})
+    res.json({msg: "Image deleted"})
 })
 
 module.exports = router

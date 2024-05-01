@@ -1,7 +1,7 @@
 const User = require('./User');
 const Portfolio = require('./Portfolio');
 const ServeLocation = require('./ServeLocation');
-const Chat = require('./Chat');
+const Chat = require('./chat');
 const ChatRoom = require('./chatRoom');
 const Specialty = require('./Specialty');
 const Review = require('./Review');
@@ -21,13 +21,15 @@ Tag.belongsToMany(Portfolio, {
     through: 'PortfolioTag'
 })
 
-// 'ChatRoom.hasMany(Chat, {
-//     foreignKey: 'chatRoomId'
-// });
+ChatRoom.hasMany(Chat);
 
-// Chat.belongsTo(ChatRoom, {
-//     foreignKey: 'chatRoomId'
-// });
+Chat.belongsTo(ChatRoom, {
+    onDelete: 'CASCADE'
+});
+
+// User.hasMany(ChatRoom);
+
+// ChatRoom.hasMany(User);
 
 // User.hasMany(Chat);
 
@@ -75,4 +77,4 @@ TransactionReport.belongsTo(User, {
 
 
 
-module.exports = { User, Portfolio, Specialty, Tag, Review, Chat, ServeLocation, TransactionReport };
+module.exports = { User, Portfolio, Specialty, Tag, Review, Chat, ChatRoom, ServeLocation, TransactionReport };
