@@ -90,7 +90,7 @@ socketIO.on('connection', (socket) => {
         user_id: data.ID,
         username: data.user,
         message: data.message,
-        room: room
+        ChatRoomId: data.ChatRoomId
       }),
       });
       socket.emit('messageResponse', data);
