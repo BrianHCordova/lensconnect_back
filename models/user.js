@@ -55,8 +55,7 @@ User.init(
         },
         averageRating:{
             type: DataTypes.FLOAT,
-            allowNull: false,
-            defaultValue: 0,
+            allowNull: true,
             validate: {
                 min: 1,
                 max: 5

@@ -8,7 +8,7 @@ router.put("/editprofile/:id", async (req, res) => {
         const user = await User.update(req.body, {
             where: {
                 id: req.params.id
-            }
+            },
         });
         
         res.json(user);
@@ -17,6 +17,24 @@ router.put("/editprofile/:id", async (req, res) => {
         res.status(500).json({ msg: "error occurred", err });
     }
 });
+
+router.put("/password/:id", async (req, res) => {
+    try {
+        const user = await User.update(req.body, {
+            where: {
+                id: req.params.id
+            },
+            individualHooks: true,
+        });
+        
+        res.json(user);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ msg: "error occurred", err });
+    }
+});
+
+
 
 // PUT route to add a specialty to a user
 router.put("/editspec/:id", async (req, res) => {
