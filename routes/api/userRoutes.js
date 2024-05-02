@@ -199,16 +199,8 @@ router.put("/verify/:id", async (req, res) => {
         });
         if (!bcrypt.compareSync(req.body.password, userData.password)) {
             res.status(400).json({ message: 'Incorrect email or password' });
-            res.json(false);
             return
           }
-        //   const validPassword = await userData.checkPassword(req.body.password);
-        //   if (!validPassword) {
-        //       res.status(401).json({
-        //           message: 'Incorrect email or password. Please try again!',
-        //       });
-        //       return;
-        //   }
         res.json(true);
     } catch (err) {
         console.log(err);
