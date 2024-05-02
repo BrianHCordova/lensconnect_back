@@ -190,5 +190,31 @@ router.post('/logout', (req, res) => {
     }
 });
 
+router.put("/verify/:id", async (req, res) => {
+    try {
+        const userData = await User.findOne(req.body, {
+            where: {
+                id: req.params.id,
+            },
+        });
+        if (!bcrypt.compareSync(req.body.password, userData.password)) {
+            res.status(400).json({ message: 'Incorrect email or password' });
+            res.json(false);
+            return
+          }
+        //   const validPassword = await userData.checkPassword(req.body.password);
+        //   if (!validPassword) {
+        //       res.status(401).json({
+        //           message: 'Incorrect email or password. Please try again!',
+        //       });
+        //       return;
+        //   }
+        res.json(true);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ msg: "error occurred", err });
+    }
+});
+
 
 module.exports = router;
