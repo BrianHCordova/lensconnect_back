@@ -27,10 +27,11 @@ const upload = multer({storage: storage})
 
 router.get('/', async (req, res) => {
     const images = await Portfolio.findAll({
-        include: [User]
+        include: [User],
+        where: {
+            isProfilePic: false
+        }
     })
-
-    // const imageUrlList = []
 
     for (let i=0; i<images.length; i++) {
 
@@ -48,8 +49,30 @@ router.get('/', async (req, res) => {
     res.send(images)
 })
 
+router.get('/:id', async (req, res) => {
+    const images = await Portfolio.findAll({
+        include: [User],
+        where: {
+            UserId: req.params.id
+        }
+    })
 
-router.post('/singlefile/:id', upload.single('image'), async (req, res) => {
+    for (let i=0; i<images.length; i++) {
+
+        const getObjectParams = {
+            Bucket: bucketName,
+            Key: images[i].image
+        }
+        const command = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+        images[i].dataValues.imageUrl = url
+       
+    }
+    res.send(images)
+})
+
+
+router.post('/profilepic/:id', upload.single('image'), async (req, res) => {
     console.log("req.body", req.body)
     console.log("req.file", req.file)
 
@@ -66,7 +89,8 @@ router.post('/singlefile/:id', upload.single('image'), async (req, res) => {
 
     const post = await Portfolio.create({
         image: req.file.originalname,
-        UserId: req.params.id
+        UserId: req.params.id,
+        isProfilePic: true
 
     })
 

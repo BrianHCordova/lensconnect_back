@@ -9,6 +9,11 @@ Portfolio.init(
             type: DataTypes.STRING, //this will be a URL
             allowNull: false
         },
+        isProfilePic: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        }
     },
     {
         sequelize,
