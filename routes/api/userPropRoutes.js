@@ -5,21 +5,36 @@ const { User, Specialty, ServeLocation } = require("../../models");
 // PUT request to edit users properties sans the specialties and servesLocation
 router.put("/editprofile/:id", async (req, res) => {
     try {
-        const user = await User.findByPk(req.params.id, {
+        const user = await User.update(req.body, {
+            where: {
+                id: req.params.id
+            },
         });
-        user.toJSON
-        console.log(req.body.biography)
-        console.log(user.biography)
-        // if(req.body.biography == user.biography) {
-        //     res.json(user)
-        // }
-        user.update(req.body);
+        
         res.json(user);
     } catch (err) {
         console.log(err);
         res.status(500).json({ msg: "error occurred", err });
     }
 });
+
+router.put("/password/:id", async (req, res) => {
+    try {
+        const user = await User.update(req.body, {
+            where: {
+                id: req.params.id
+            },
+            individualHooks: true,
+        });
+        
+        res.json(user);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ msg: "error occurred", err });
+    }
+});
+
+
 
 // PUT route to add a specialty to a user
 router.put("/editspec/:id", async (req, res) => {

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { User, Specialties, ServeLocation, Portfolio } = require("../../models");
+const { User, Specialty, ServeLocation, Portfolio } = require("../../models");
 const multer = require('multer')
 const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3')
 require('dotenv').config();
@@ -26,9 +26,12 @@ const storage = multer.memoryStorage()
 const upload = multer({storage: storage})
 
 router.get('/', async (req, res) => {
-    const images = await Portfolio.findAll()
-
-    // const imageUrlList = []
+    const images = await Portfolio.findAll({
+        include: [User],
+        where: {
+            isProfilePic: false
+        }
+    })
 
     for (let i=0; i<images.length; i++) {
 
@@ -46,15 +49,37 @@ router.get('/', async (req, res) => {
     res.send(images)
 })
 
+router.get('/:id', async (req, res) => {
+    const images = await Portfolio.findAll({
+        include: [User],
+        where: {
+            UserId: req.params.id
+        }
+    })
 
-router.post('/singlefile/:id', upload.single('image'), async (req, res) => {
+    for (let i=0; i<images.length; i++) {
+
+        const getObjectParams = {
+            Bucket: bucketName,
+            Key: images[i].image
+        }
+        const command = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+        images[i].dataValues.imageUrl = url
+       
+    }
+    res.send(images)
+})
+
+
+router.post('/profilepic/:id', upload.single('image'), async (req, res) => {
     console.log("req.body", req.body)
     console.log("req.file", req.file)
 
-    // req.file.buffer
+    const randomImageName= crypto.randomUUID()
     const params = {
         Bucket: bucketName,
-        Key: req.file.originalname,
+        Key: randomImageName,
         Body: req.file.buffer,
         ContentType: req.file.mimetype,
     }
@@ -63,8 +88,9 @@ router.post('/singlefile/:id', upload.single('image'), async (req, res) => {
     await s3.send(command)
 
     const post = await Portfolio.create({
-        image: req.file.originalname,
-        UserId: req.params.id
+        image: randomImageName,
+        UserId: req.params.id,
+        isProfilePic: true
 
     })
 
@@ -83,9 +109,11 @@ router.post('/multipleFiles/:id', upload.array('multipleFiles'), async (req, res
     // }
 
     for (const items of itemsToUpload) {
+
+        const randomImageName= crypto.randomUUID()
         const params = {
             Bucket: bucketName,
-            Key: items.originalname,
+            Key: randomImageName,
             Body: items.buffer,
             ContentType: items.mimetype,
         }
@@ -94,7 +122,7 @@ router.post('/multipleFiles/:id', upload.array('multipleFiles'), async (req, res
         await s3.send(command)
     
         const post = await Portfolio.create({
-            image: items.originalname,
+            image: randomImageName,
             UserId: req.params.id
     
         })
@@ -107,12 +135,12 @@ router.post('/multipleFiles/:id', upload.array('multipleFiles'), async (req, res
 })
 
 router.delete('/:id', async (req, res) => {
-    const image = await Portfolio.findByPk({where: { id: req.params.id}})
+    const image = await Portfolio.findByPk(req.params.id)
     if (!image) {
         res.status(404).send("Post not found")
         return
     }
-
+    console.log(image)
     const params = {
         Bucket: bucketName,
         Key: image.image
@@ -121,8 +149,8 @@ router.delete('/:id', async (req, res) => {
     const command = new DeleteObjectCommand(params)
     await s3.send(command)
 
-    await Portfolio.delete({where: {id: req.params.id}})
-
+    await Portfolio.destroy({where: {id: req.params.id}})
+    res.json({msg: "Image deleted"})
 })
 
 module.exports = router

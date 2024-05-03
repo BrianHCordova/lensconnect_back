@@ -72,6 +72,8 @@ router.post("/", async (req, res) => {
         // Sets each user to their respective role in the review model
         await reviewData.setReviewee(reviewee)
         await reviewData.setReviewer(reviewer)
+        console.log('+++++++++++++++')
+        console.log(reviewData)
         await reviewer.addReview(reviewData)
         // Returns the data
         res.json(reviewData);
