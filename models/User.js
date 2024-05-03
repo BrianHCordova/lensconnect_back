@@ -58,7 +58,7 @@ User.init(
             allowNull: true,
             defaultValue: 0,
             validate: {
-                min: 1,
+                min: 0,
                 max: 5
             }
         }
