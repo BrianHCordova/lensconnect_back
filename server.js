@@ -48,7 +48,7 @@ socketIO.on('connection', (socket) => {
     console.log(`🚪: ${userId} joined room ${room} with ${id}`);
     //TODO: create logic to check if user and receiver exist
     //check to see if room exists
-    fetch(`http://localhost:3000/api/chatroom/room/${room}`)
+    fetch(`https://lensconnect-back.onrender.com/api/chatroom/room/${room}`)
       .then(response => response.json())
       .then(data => {
         //if exists, join room
@@ -56,7 +56,7 @@ socketIO.on('connection', (socket) => {
           socket.join(room);
           //else, create room and join
         } else {
-          fetch('http://localhost:3000/api/chatroom', {
+          fetch('https://lensconnect-back.onrender.com/api/chatroom', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ socketIO.on('connection', (socket) => {
       
       console.log(`📩: ${JSON.stringify(data.user)} says ${JSON.stringify(data.message)}`);
           //   // make a post request here to save the message to the database
-      fetch('http://localhost:3000/api/chat', {
+      fetch('https://lensconnect-back.onrender.com/api/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
