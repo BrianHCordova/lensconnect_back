@@ -9,13 +9,12 @@ const http = require('http');
 const cors = require('cors');
 const { log } = require("console");
 
-// import sequelize connection
 
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT || 3000;
 // const clientPORT = process.env.CLIENT_PORT || 3001;
 const server = http.createServer(app);
-app.use(cors());
 const socketIO = require('socket.io')(server, {
 	  cors: {
 	origin: `*`,
