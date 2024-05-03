@@ -76,10 +76,10 @@ router.post('/profilepic/:id', upload.single('image'), async (req, res) => {
     console.log("req.body", req.body)
     console.log("req.file", req.file)
 
-    // req.file.buffer
+    const randomImageName= crypto.randomUUID()
     const params = {
         Bucket: bucketName,
-        Key: req.file.originalname,
+        Key: randomImageName,
         Body: req.file.buffer,
         ContentType: req.file.mimetype,
     }
@@ -88,7 +88,7 @@ router.post('/profilepic/:id', upload.single('image'), async (req, res) => {
     await s3.send(command)
 
     const post = await Portfolio.create({
-        image: req.file.originalname,
+        image: randomImageName,
         UserId: req.params.id,
         isProfilePic: true
 
@@ -109,9 +109,11 @@ router.post('/multipleFiles/:id', upload.array('multipleFiles'), async (req, res
     // }
 
     for (const items of itemsToUpload) {
+
+        const randomImageName= crypto.randomUUID()
         const params = {
             Bucket: bucketName,
-            Key: items.originalname,
+            Key: randomImageName,
             Body: items.buffer,
             ContentType: items.mimetype,
         }
@@ -120,7 +122,7 @@ router.post('/multipleFiles/:id', upload.array('multipleFiles'), async (req, res
         await s3.send(command)
     
         const post = await Portfolio.create({
-            image: items.originalname,
+            image: randomImageName,
             UserId: req.params.id
     
         })
